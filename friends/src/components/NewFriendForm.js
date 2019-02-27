@@ -46,11 +46,16 @@ class NewFriendForm extends React.Component {
             email: this.state.email
         }
         // Do some data checks
-
-
-        axios.post('http://localhost:5000/friends', newFriend)
+        if (newFriend.name.length === 0) {
+            alert("Don't forget a valid name!")
+        } else if (parseInt(newFriend.age) > 0) {
+            alert("Please input a valid age!")
+        } else if (newFriend.email.length === 0) {
+            alert("Please enter a valid email address")
+        } else {
+            axios.post('http://localhost:5000/friends', newFriend)
             .then(res => {
-                alert("Success!")
+                alert("Success! You just added a new friend!")
                 console.log(res)
                 window.location.reload(true);
                 this.setState({
@@ -62,6 +67,7 @@ class NewFriendForm extends React.Component {
             .catch(err => {
                 console.log(err);
             })
+        }     
     }
 
     render() {
