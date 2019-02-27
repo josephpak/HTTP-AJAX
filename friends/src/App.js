@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 
 import './App.css';
 import FriendList from './components/FriendList';
+import NewFriendForm from './components/NewFriendForm';
+
+const AppWrapper = styled.div`
+  display: flex;
+  margin: 0 50px;
+  justify-content: space-around;
+`
 
 class App extends Component {
   constructor() {
@@ -23,11 +31,14 @@ class App extends Component {
   
   render() {
     return (
-      <div className="App">
+      <AppWrapper>
         <FriendList 
         friends={this.state.friendsData}
         />
-      </div>
+        <NewFriendForm 
+        friends={this.state.friendsData}
+        />
+      </AppWrapper>
     );
   }
 }
