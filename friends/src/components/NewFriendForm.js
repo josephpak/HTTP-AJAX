@@ -40,7 +40,28 @@ class NewFriendForm extends React.Component {
 
     addFriend = e => {
         e.preventDefault();
-        console.log("Testing!")
+        const newFriend = {
+            name: this.state.name,
+            age: this.state.age,
+            email: this.state.email
+        }
+        // Do some data checks
+
+
+        axios.post('http://localhost:5000/friends', newFriend)
+            .then(res => {
+                alert("Success!")
+                console.log(res)
+                window.location.reload(true);
+                this.setState({
+                    name: '',
+                    age: '',
+                    email: ''
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     render() {
