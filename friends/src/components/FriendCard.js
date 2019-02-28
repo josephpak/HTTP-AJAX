@@ -18,7 +18,9 @@ const FriendCardWrapper = styled.div`
     }
 `
 
-const FriendCard = ({ friend }) => {
+const FriendCard = (props) => {
+
+    const { friend } = props
 
     const deleteFriend = e => {
         e.preventDefault();
@@ -26,7 +28,7 @@ const FriendCard = ({ friend }) => {
         axios.delete(`http://localhost:5000/friends/${friend.id}`)
             .then(res => {
                 console.log(res);
-                window.location.reload(true);
+                props.refreshFriends()
             })
     }
 

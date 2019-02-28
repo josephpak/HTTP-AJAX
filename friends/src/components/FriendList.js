@@ -8,13 +8,17 @@ const FriendListWrapper = styled.div`
     flex-direction: column;
 `
 
-const FriendList = ({ friends }) => {
+const FriendList = (props) => {
+
+    const { friends } = props
+
     return (
         <FriendListWrapper>
             {friends.map(friend => (
                 <FriendCard 
                 key={friend.id}
                 friend={friend}
+                refreshFriends={props.refreshFriends}
                 />
             ))}
         </FriendListWrapper>

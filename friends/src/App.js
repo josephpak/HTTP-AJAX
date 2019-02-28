@@ -16,11 +16,13 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      friendsData: []
+      friendsData: [],
+      refreshed: false
     }
   }
 
   componentDidMount() {
+    console.log("CDM")
     axios.get('http://localhost:5000/friends')
       .then(res => {
         this.setState({
@@ -31,15 +33,37 @@ class App extends Component {
         console.log(err);
       })
   }
+
+  componentDidUpdate() {
+    axios.get('http://localhost:5000/friends')
+      .then(res => {
+        this.setState({
+          friendsData: res.data
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  refreshFriends = () => {
+    this.setState({
+      refreshed: !this.state.refreshed
+    })
+  }
+  
   
   render() {
+    console.log("re-render")
     return (
       <AppWrapper>
         <FriendList 
         friends={this.state.friendsData}
+        refreshFriends={this.refreshFriends}
         />
         <NewFriendForm 
         friends={this.state.friendsData}
+        refreshFriends={this.refreshFriends}
         />
       </AppWrapper>
     );

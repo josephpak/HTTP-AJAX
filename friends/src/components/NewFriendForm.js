@@ -63,7 +63,7 @@ class NewFriendForm extends React.Component {
             .then(res => {
                 alert(`You just updated ${friendCheck[0].name}!`)
                 console.log(res)
-                window.location.reload(true);
+                this.props.refreshFriends();
                 this.setState({
                     name: '',
                     age: '',
@@ -78,7 +78,7 @@ class NewFriendForm extends React.Component {
             .then(res => {
                 alert("Success! You just added a new friend!")
                 console.log(res)
-                window.location.reload(true);
+                this.props.refreshFriends();
                 this.setState({
                     name: '',
                     age: '',
