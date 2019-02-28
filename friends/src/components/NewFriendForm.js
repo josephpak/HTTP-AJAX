@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 const NewFriendFormWrapper = styled.form`
     display: flex;
@@ -22,86 +21,78 @@ const FormRowWrapper = styled.div`
 `
 
 class NewFriendForm extends React.Component {
-    constructor() {
-        super();
-        this.state = {
+    state = {
+        friend: this.props.activeFriend || {
             name: '',
             age: '',
             email: ''
+        } 
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            this.props.activeFriend &&
+            prevProps.activeFriend !== this.props.activeFriend
+        ) {
+            this.setState({
+            item: this.props.activeFriend
+            });
         }
     }
 
     handleFormChange = e => {
+        e.persist();
+        let value = e.target.value
         e.preventDefault();
-        this.setState({
-            [ e.target.name ]: e.target.value
-        })
+        this.setState(prevState => ({
+            friend: {
+                ...prevState.friend,
+                [ e.target.name ]: value
+            }
+        }))
     }
 
-    updateFriendList = e => {
+    handleSubmit = e => {
         e.preventDefault();
-        const friendData = {
-            name: this.state.name,
-            age: this.state.age,
-            email: this.state.email
+        // Do some data checks
+
+        const initialState = {
+            name: '',
+            age: '',
+            email: ''
         }
 
-        const friendCheck = this.props.friends.filter(friend => (
-            friend.name === friendData.name
-        ))
-
-        // Do some data checks
-        if (friendData.name.length === 0) {
+        if (this.state.friend.name.length === 0) {
             alert("Don't forget a valid name!")
-        } else if (friendData.age === "") {
+        } else if (!this.state.friend.age) {
             alert("Please input a valid age!")
-        } else if (friendData.email.length === 0) {
+        } else if (!this.state.friend.email.includes('@')) {
             alert("Please enter a valid email address")
-        } else if (friendCheck.length > 0) { 
-            const friendId = friendCheck[0].id;
-            axios.put(`http://localhost:5000/friends/${friendId}`, friendData)
-            .then(res => {
-                alert(`You just updated ${friendCheck[0].name}!`)
-                console.log(res)
-                this.props.refreshFriends();
-                this.setState({
-                    name: '',
-                    age: '',
-                    email: ''
-                })
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        } else if (this.props.activeFriend) {
+            this.props.updateFriend(e, this.state.friend)
+            this.setState({
+                friend: initialState
+            })   
         } else {
-            axios.post('http://localhost:5000/friends', friendData)
-            .then(res => {
-                alert("Success! You just added a new friend!")
-                console.log(res)
-                this.props.refreshFriends();
-                this.setState({
-                    name: '',
-                    age: '',
-                    email: ''
-                })
-            })
-            .catch(err => {
-                console.log(err);
-            })
-        }     
+            this.props.addFriend(e, this.state.friend)
+            this.setState({
+                friend: initialState
+            })   
+        }
+        
     }
 
     render() {
         return (
             <NewFriendFormWrapper
-                onSubmit={this.updateFriendList}
+                onSubmit={this.handleSubmit}
             >
                 <FormRowWrapper>
                     <p>First Name</p>
                     <input           
                     type="text"
                     name="name"
-                    value={this.state.name}
+                    value={this.state.friend.name}
                     autoComplete="off"
                     onChange={this.handleFormChange}
                     ></input>
@@ -111,7 +102,7 @@ class NewFriendForm extends React.Component {
                     <input
                     type="text"
                     name="age"
-                    value={this.state.age}
+                    value={this.state.friend.age}
                     autoComplete="off"
                     onChange={this.handleFormChange}           
                     ></input>
@@ -121,7 +112,7 @@ class NewFriendForm extends React.Component {
                     <input
                     type="text"
                     name="email"
-                    value={this.state.email}
+                    value={this.state.friend.email}
                     autoComplete="off"
                     onChange={this.handleFormChange}
                     ></input>

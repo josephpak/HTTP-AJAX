@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 const FriendCardWrapper = styled.div`
     height: 200px;
@@ -22,24 +21,17 @@ const FriendCard = (props) => {
 
     const { friend } = props
 
-    const deleteFriend = e => {
-        e.preventDefault();
-        alert("Warning!!!")
-        axios.delete(`http://localhost:5000/friends/${friend.id}`)
-            .then(res => {
-                console.log(res);
-                props.refreshFriends()
-            })
-    }
-
     return (
         <FriendCardWrapper>
             <p>{`Name: ${friend.name}`}</p>
             <p>{`Age: ${friend.age}`}</p>
             <p>{`Email: ${friend.email}`}</p>
             <button
-            onClick={deleteFriend}
+            onClick={e => props.deleteFriend(e, friend.id)}
             >Delete Friend</button>
+            <button 
+            onClick={e => props.populateForm(e, friend)}
+            >Update Item</button>
         </FriendCardWrapper>
     )
 }

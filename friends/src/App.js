@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { Route } from 'react-router-dom';
 
 import './App.css';
 import FriendList from './components/FriendList';
@@ -16,7 +17,8 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      friendsData: [],
+      activeFriend: null,
+      friends: [],
       refreshed: false
     }
   }
@@ -26,7 +28,7 @@ class App extends Component {
     axios.get('http://localhost:5000/friends')
       .then(res => {
         this.setState({
-          friendsData: res.data
+          friends: res.data
         })
       })
       .catch(err => {
@@ -34,37 +36,92 @@ class App extends Component {
       })
   }
 
-  componentDidUpdate() {
-    axios.get('http://localhost:5000/friends')
+  addFriend = (e, friend) => {
+    e.preventDefault();
+    axios.post('http://localhost:5000/friends', friend)
       .then(res => {
-        this.setState({
-          friendsData: res.data
-        })
+          alert("Success! You just added a new friend!")
+          console.log(res)
+          this.setState({
+            friends: res.data
+          });
+      })
+      .catch(err => {
+          console.log(err);
+      })
+  }
+
+  deleteFriend = (e, id) => {
+    e.preventDefault()
+    if (window.confirm("Are you sure you want to delete this friend?")) {
+      axios.delete(`http://localhost:5000/friends/${id}`)
+      .then(res => {
+          console.log(res);
+          this.setState({
+            friends: res.data
+          });
       })
       .catch(err => {
         console.log(err);
       })
+    }  
   }
 
-  refreshFriends = () => {
+  populateForm = (e, friend) => {
+    e.preventDefault();
     this.setState({
-      refreshed: !this.state.refreshed
+      activeFriend: friend
     })
+    this.props.history.push("/friend-form");
   }
-  
+
+  updateFriend = (e, friend) => {
+    e.preventDefault();
+    axios.put(`http://localhost:5000/friends/${friend.id}`, friend)
+      .then(res => {
+          alert(`You just updated ${friend.name}!`)
+          console.log(res)
+          this.setState({
+            activeFriend: null,
+            friends: res.data
+          })
+          this.props.history.push("/friend-list");
+      })
+      .catch(err => {
+          console.log(err);
+      })
+  }
   
   render() {
     console.log("re-render")
     return (
       <AppWrapper>
-        <FriendList 
-        friends={this.state.friendsData}
-        refreshFriends={this.refreshFriends}
+
+        <Route
+        path="/friend-list"
+        render={props => (
+          <FriendList 
+          {...props}
+          friends={this.state.friends}
+          deleteFriend={this.deleteFriend}
+          populateForm={this.populateForm}
+          />
+        )} 
         />
-        <NewFriendForm 
-        friends={this.state.friendsData}
-        refreshFriends={this.refreshFriends}
+
+        <Route
+        path="/friend-form"
+        render={props => (
+          <NewFriendForm 
+          {...props}
+          activeFriend={this.state.activeFriend}
+          friends={this.state.friends}
+          addFriend={this.addFriend}
+          updateFriend={this.updateFriend}
+          />
+        )}
         />
+        
       </AppWrapper>
     );
   }

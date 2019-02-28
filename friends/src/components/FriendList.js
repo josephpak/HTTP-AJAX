@@ -18,7 +18,8 @@ const FriendList = (props) => {
                 <FriendCard 
                 key={friend.id}
                 friend={friend}
-                refreshFriends={props.refreshFriends}
+                deleteFriend={props.deleteFriend}
+                populateForm={props.populateForm}
                 />
             ))}
         </FriendListWrapper>
