@@ -5,18 +5,37 @@ const NewFriendFormWrapper = styled.form`
     display: flex;
     flex-direction: column;
     padding: 30px;
-    border: 1px solid blue;
-    height: 200px;
+    border: 1px solid rgb(59, 89, 152);
+    height: 250px;
+    align-items: center;
+
+    button {
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        max-width: 100px;
+        background-color: #3B5998;
+        border-top-color: #D9DFEA;
+        border-left-color: #D9DFEA;
+        border-bottom-color: #3B5998;
+        border-right-color: #3B5998;
+    }
 `
 
 const FormRowWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    width: 100%;
 
     input {
         height: 14px;
         margin: 0 10px;
+        background-color: rgb(216, 223, 234);
+        border: 1px solid rgb(102, 102, 102);
     }
 `
 
@@ -84,9 +103,8 @@ class NewFriendForm extends React.Component {
 
     render() {
         return (
-            <NewFriendFormWrapper
-                onSubmit={this.handleSubmit}
-            >
+            <NewFriendFormWrapper onSubmit={this.handleSubmit}>
+                <h3>{`[ ${this.props.activeFriend ? "update" : "add new"} friend ]`}</h3>
                 <FormRowWrapper>
                     <p>First Name</p>
                     <input           
@@ -117,7 +135,7 @@ class NewFriendForm extends React.Component {
                     onChange={this.handleFormChange}
                     ></input>
                 </FormRowWrapper>
-                <button>Add Friend</button>
+                <button>{`${this.props.activeFriend ? "Update" : "Add New"} Friend`}</button>
             </NewFriendFormWrapper>
         )
     }

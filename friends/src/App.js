@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Route } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 
 import './App.css';
 import FriendList from './components/FriendList';
@@ -11,6 +11,22 @@ const AppWrapper = styled.div`
   display: flex;
   margin: 0 50px;
   justify-content: space-around;
+`
+
+const NavWrapper = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+
+  .nav-links {
+    a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #538ADC;
+    }
+
+  }
 `
 
 class App extends Component {
@@ -95,34 +111,48 @@ class App extends Component {
   render() {
     console.log("re-render")
     return (
-      <AppWrapper>
+      <>
+        <NavWrapper>
+            <h1>the friend list</h1>
+            <div className="nav-links">
+              <NavLink exact to="/">
+                [ home ]
+              </NavLink>
+              <NavLink to="/friend-list">[ friends ]</NavLink>
+              <NavLink to="/friend-form">[ add friend ]</NavLink>
+            </div>
+        </NavWrapper>
+        <AppWrapper>
 
-        <Route
-        path="/friend-list"
-        render={props => (
-          <FriendList 
-          {...props}
-          friends={this.state.friends}
-          deleteFriend={this.deleteFriend}
-          populateForm={this.populateForm}
-          />
-        )} 
-        />
+          
 
-        <Route
-        path="/friend-form"
-        render={props => (
-          <NewFriendForm 
-          {...props}
-          activeFriend={this.state.activeFriend}
-          friends={this.state.friends}
-          addFriend={this.addFriend}
-          updateFriend={this.updateFriend}
+          <Route
+          path="/friend-list"
+          render={props => (
+            <FriendList 
+            {...props}
+            friends={this.state.friends}
+            deleteFriend={this.deleteFriend}
+            populateForm={this.populateForm}
+            />
+          )} 
           />
-        )}
-        />
-        
-      </AppWrapper>
+
+          <Route
+          path="/friend-form"
+          render={props => (
+            <NewFriendForm 
+            {...props}
+            activeFriend={this.state.activeFriend}
+            friends={this.state.friends}
+            addFriend={this.addFriend}
+            updateFriend={this.updateFriend}
+            />
+          )}
+          />
+          
+        </AppWrapper>
+      </>
     );
   }
 }

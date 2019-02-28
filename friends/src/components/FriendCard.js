@@ -4,17 +4,36 @@ import styled from 'styled-components';
 const FriendCardWrapper = styled.div`
     height: 200px;
     width: 500px;
-    border: 1px solid black;
+    border: 1px solid rgb(59, 89, 152);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 5px 0;
 
     button {
-        background-color: firebrick;
         color: white;
         cursor: pointer;
     }
+
+    .delete {
+        background-color: firebrick;
+    }
+
+    .update {
+        background-color: #3B5998;
+        border-top-color: #D9DFEA;
+        border-left-color: #D9DFEA;
+        border-bottom-color: #3B5998;
+        border-right-color: #3B5998;
+    }
+`
+
+const FriendCardContentWrapper = styled.div`
+`
+
+const FriendCardButtonWrapper = styled.div`
+    display: flex;
+    align-items: flex-start;
 `
 
 const FriendCard = (props) => {
@@ -23,15 +42,21 @@ const FriendCard = (props) => {
 
     return (
         <FriendCardWrapper>
+            <FriendCardContentWrapper>
             <p>{`Name: ${friend.name}`}</p>
             <p>{`Age: ${friend.age}`}</p>
             <p>{`Email: ${friend.email}`}</p>
-            <button
-            onClick={e => props.deleteFriend(e, friend.id)}
-            >Delete Friend</button>
-            <button 
-            onClick={e => props.populateForm(e, friend)}
-            >Update Item</button>
+            </FriendCardContentWrapper>
+            <FriendCardButtonWrapper>
+                <button
+                onClick={e => props.deleteFriend(e, friend.id)}
+                className="delete"
+                >Delete Friend</button>
+                <button 
+                onClick={e => props.populateForm(e, friend)}
+                className="update"
+                >Update Item</button>
+            </FriendCardButtonWrapper>
         </FriendCardWrapper>
     )
 }
