@@ -38,22 +38,43 @@ class NewFriendForm extends React.Component {
         })
     }
 
-    addFriend = e => {
+    updateFriendList = e => {
         e.preventDefault();
-        const newFriend = {
+        const friendData = {
             name: this.state.name,
             age: this.state.age,
             email: this.state.email
         }
+
+        const friendCheck = this.props.friends.filter(friend => (
+            friend.name === friendData.name
+        ))
+
         // Do some data checks
-        if (newFriend.name.length === 0) {
+        if (friendData.name.length === 0) {
             alert("Don't forget a valid name!")
-        } else if (parseInt(newFriend.age) > 0) {
+        } else if (friendData.age === "") {
             alert("Please input a valid age!")
-        } else if (newFriend.email.length === 0) {
+        } else if (friendData.email.length === 0) {
             alert("Please enter a valid email address")
+        } else if (friendCheck.length > 0) { 
+            const friendId = friendCheck[0].id;
+            axios.put(`http://localhost:5000/friends/${friendId}`, friendData)
+            .then(res => {
+                alert(`You just updated ${friendCheck[0].name}!`)
+                console.log(res)
+                window.location.reload(true);
+                this.setState({
+                    name: '',
+                    age: '',
+                    email: ''
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            })
         } else {
-            axios.post('http://localhost:5000/friends', newFriend)
+            axios.post('http://localhost:5000/friends', friendData)
             .then(res => {
                 alert("Success! You just added a new friend!")
                 console.log(res)
@@ -73,7 +94,7 @@ class NewFriendForm extends React.Component {
     render() {
         return (
             <NewFriendFormWrapper
-                onSubmit={this.addFriend}
+                onSubmit={this.updateFriendList}
             >
                 <FormRowWrapper>
                     <p>First Name</p>
