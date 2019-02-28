@@ -6,7 +6,8 @@ const FriendCardWrapper = styled.div`
     width: 500px;
     border: 1px solid rgb(59, 89, 152);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 40px;
     align-items: center;
     margin: 5px 0;
 
