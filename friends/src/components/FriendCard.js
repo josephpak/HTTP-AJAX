@@ -29,6 +29,7 @@ const FriendCardWrapper = styled.div`
 `
 
 const FriendCardContentWrapper = styled.div`
+    padding-right: 30px;
 `
 
 const FriendCardButtonWrapper = styled.div`
