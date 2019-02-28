@@ -51,11 +51,11 @@ const FriendCard = (props) => {
                 <button
                 onClick={e => props.deleteFriend(e, friend.id)}
                 className="delete"
-                >Delete Friend</button>
+                >Delete</button>
                 <button 
                 onClick={e => props.populateForm(e, friend)}
                 className="update"
-                >Update Item</button>
+                >Update</button>
             </FriendCardButtonWrapper>
         </FriendCardWrapper>
     )
