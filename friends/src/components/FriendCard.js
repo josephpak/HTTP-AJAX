@@ -49,14 +49,14 @@ const FriendCard = (props) => {
             <p>{`Email: ${friend.email}`}</p>
             </FriendCardContentWrapper>
             <FriendCardButtonWrapper>
-                <button
-                onClick={e => props.deleteFriend(e, friend.id)}
-                className="delete"
-                >Delete</button>
                 <button 
                 onClick={e => props.populateForm(e, friend)}
                 className="update"
                 >Update</button>
+                <button
+                onClick={e => props.deleteFriend(e, friend.id)}
+                className="delete"
+                >Delete</button>                
             </FriendCardButtonWrapper>
         </FriendCardWrapper>
     )
